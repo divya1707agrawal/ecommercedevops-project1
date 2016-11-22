@@ -70,6 +70,11 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+     <groupId>com.niit</groupId>
+  <artifactId>ShoppingCartBackend</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>ShoppingCartFrontend</finalName>

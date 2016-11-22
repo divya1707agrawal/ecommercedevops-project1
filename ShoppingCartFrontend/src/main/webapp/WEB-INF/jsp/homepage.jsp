@@ -9,16 +9,17 @@
 <body>
 
 <div class="container">
-  <div class="dropdown">
+ <div class="dropdown">
     <button type="button" class="btn btn-primary">Button</button>
-      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Product
+       <div class="btn-group">
+       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Product
     <span class="caret"></span></button>
    
     <ul class="dropdown-menu">
-      <li><a href="#Product1">pastries</a></li>
-      <li><a href="#Product2">cakes</a></li>
-      <li><a href="#Product3">chocolates</a></li>
-    </ul>
+      <li><a href="#">pastries</a></li>
+      <li><a href="#">cakes</a></li>
+      <li><a href="#">chocolates</a></li>
+    </ul></div>
       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">about us
      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Contact us
   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Login
