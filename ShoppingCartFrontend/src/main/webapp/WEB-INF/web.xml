@@ -6,10 +6,21 @@
    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
    <load-on-startup>1</load-on-startup>
  </servlet>
+<servlet>
+	<description>
+	</description>
+	<display-name>MyServlet</display-name>
+	<servlet-name>MyServlet</servlet-name>
+	<servlet-class>MyServlet</servlet-class>
+</servlet>
  
  <servlet-mapping>
    <servlet-name>dispatcher</servlet-name>
    <url-pattern>/</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+ 	<servlet-name>MyServlet</servlet-name>
+ 	<url-pattern>/MyServlet</url-pattern>
  </servlet-mapping>
  
  <context-param>

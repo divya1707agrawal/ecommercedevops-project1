@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
+	
 	@RequestMapping("/")
 	public ModelAndView index()
 	{
-		return new ModelAndView("index");
+		return new ModelAndView("homepage");
 	}
 @RequestMapping("/login")
 
