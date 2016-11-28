@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+
+<var name="shippingAddress" class="com.niit.shoopingcart.model.ShippingAddress"/>
+<var name="billingAddress" class="com.niit.shoopingcart.model.BillingAddress"/>
+<var name="mycart" class="com.niit.shoopingcart.model.MyCart"/>
+<var name="order" class="com.niit.shoopingcart.model.Order"/>
+<var name="paymentMethod" class="com.niit.shoopingcart.model.PaymentMethod"/>
+
+<On-start>
+<evaluate expression="orderWebflow.initFlow()" result="flowScope.order"/>
+</On-start>
+
+<view-state id="flowExecutor" view="user/shippingAddress" model="shippingAddress">
+<transition on="submitShippingAddress" to="shippingDetails"/>
+</view-state>
+
+<action-state id="shippingDetails">
+<evelute expression="orderWebflow.addShippingAddress(flowScope.order,shippingAddress)">
+</evelute>
+<trancition on="success" to="viewBillingDetails"/>
+</action-state>
+
+<view-state id="viewBillingDetails" view="user/billingAddress" model="billingAddress">
+<transition on="submitBillingAddress" to="billingDetails"/>
+<transition on="backToShippingAddress" to="cart_chaeckout"/>
+</view-state>
+
+<action-state id="billingDetails">
+<eveluate expression="orderWebflow.addBillingAddress(flowScope.order,billingAddress)">
+</eveluate>
+<transition on="success" to="viewPaymentDetails">
+</action-state>
+
+<view-state id="viewPaymentDetails" view="user/payment" model="paymentMethod">
+<transition on="submitPaymentMethod" to="paymentDteails"/>
+</view-state>
+
+<action-state id="paymentDetails">
+<evaluate expression="orderWebflow.addPaymentMethod(flowScope.order,paymentMethod)">
+</evaluate>
+<transition on="success" to="oderconfirm">
+</action-state>
+
+<view-state id="orderonfirm" view="user/orderConfirmed">
+<transition on="finalHome" to="toHome"/>
+</view-state>
+
+<end-state id="toHome" view="external Redirect:contextRelative:/"/>
+<global-transitions>
+<transition on="cancle" to="toCartView"/>
+</global-transitions>
+</flow>
