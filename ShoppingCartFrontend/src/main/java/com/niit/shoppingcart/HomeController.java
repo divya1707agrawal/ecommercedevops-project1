@@ -118,12 +118,13 @@ public String validate(@RequestParam(value="usr") String user ,@RequestParam(val
 	}
 }
 @RequestMapping(value="/viewproduct",method=RequestMethod.GET)
-public @ResponseBody String viewproduct(@RequestParam(value="name") String name)
+public ModelAndView viewproduct(@RequestParam(value="name") String name)
 {
   java.util.List lst=productDAO.getBycatName(name);
-  Gson gson=new Gson();
-	String data=gson.toJson(lst);
-	return data;
+  
+  ModelAndView obj=new ModelAndView("viewproduct");
+  obj.addObject("prlist",lst);
+  return obj;
 }
 @RequestMapping("/viewproductdata")
 public ModelAndView viewdata()

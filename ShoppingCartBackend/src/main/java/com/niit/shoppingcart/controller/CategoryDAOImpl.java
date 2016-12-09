@@ -28,10 +28,10 @@ public class CategoryDAOImpl implements CategoryDAO {
 		{
 			if(get(category.getId())!=null)
 			{
-				return false;
-			}
-			sessionFactory.openSession().save(category);
-			return true;
+				sessionFactory.openSession().save(category);
+				return true;
+			}return false;
+			
 		}
 		catch(Exception e)
 		{
@@ -46,10 +46,11 @@ public class CategoryDAOImpl implements CategoryDAO {
 		{
 			if(get(category.getId())!=null)
 			{
-				return false;
+				sessionFactory.openSession().update(category);
+				return true;
+				
 			}
-			sessionFactory.openSession().update(category);
-			return true;
+			return false;
 		}
 		catch(HibernateException e)
 		{
@@ -64,10 +65,11 @@ public class CategoryDAOImpl implements CategoryDAO {
 		{
 			if(get(category.getId())!=null)
 			{
-				return false;
-			}
-			sessionFactory.openSession().delete(category);
-			return true;
+				sessionFactory.openSession().delete(category);
+				return true;
+				
+			}return false;
+			
 		}
 		catch(HibernateException e)
 		{

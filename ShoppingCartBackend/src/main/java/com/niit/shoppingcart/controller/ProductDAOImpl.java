@@ -49,11 +49,11 @@ public class ProductDAOImpl implements ProductDAO {
 		try
 		{
 			if(get(Product.getId())!=null)
-			{
-				return false;
-			}
-			sessionFactory.openSession().update(Product);
+			{sessionFactory.openSession().update(Product);
 			return true;
+				
+			}
+			return false;
 		}
 		catch(HibernateException e)
 		{
@@ -68,10 +68,11 @@ public class ProductDAOImpl implements ProductDAO {
 		{
 			if(get(Product.getId())!=null)
 			{
-				return false;
-			}
-			sessionFactory.openSession().delete(Product);
-			return true;
+				sessionFactory.openSession().delete(Product);
+				return true;
+				
+			}return false;
+			
 		}
 		catch(HibernateException e)
 		{
@@ -127,5 +128,6 @@ public class ProductDAOImpl implements ProductDAO {
 	return query.list();
 }
 
+	
 	
 }

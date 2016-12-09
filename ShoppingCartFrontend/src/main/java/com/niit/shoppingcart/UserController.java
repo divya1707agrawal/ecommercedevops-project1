@@ -3,9 +3,13 @@ package com.niit.shoppingcart;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,7 +100,7 @@ public class UserController {
 	return mv;
 }
 @RequestMapping("/logout")
-public ModelAndView logout(HttpServletRequest request){
+public ModelAndView logout(HttpServletRequest request,HttpServletResponse response){
 	//log.debug("Starting of the method logout");
 	ModelAndView mv=new ModelAndView("/home");
 	session.invalidate();
@@ -105,6 +109,10 @@ public ModelAndView logout(HttpServletRequest request){
 	session.setAttribute("categoryList",categoryDAO.list());
 	mv.addObject("logoutMessage","you successfully logged out");
 	mv.addObject("loggedOut","true");
+	Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+	if(auth!=null){
+		new SecurityContextLogoutHandler().logout(request,response,auth);
+	}
 	//log.debug("Ending of the method logout");
 	return mv;
 }

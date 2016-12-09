@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.niit.shoppingcart.controller.Category;
 import com.niit.shoppingcart.controller.CategoryDAO;
+import com.niit.shoppingcart.controller.Supplier;
 @Controller
 public class CategoryController {
 	
@@ -78,5 +82,18 @@ public class CategoryController {
 		return "/homepage";*/
 		}
 
+	@RequestMapping("manage_category/edit/{id}")
+   	public ModelAndView editCategory(@PathVariable("id") String id)
+   	{
+   	category=categoryDAO.get(id);
+   	
+   	ModelAndView obj=new ModelAndView("/edit");
+   	obj.addObject("selectedCategory",category);
+   	return obj;
+   	} 
+	
+
+
+	
 }
 
