@@ -34,7 +34,7 @@ public class OrderWebflow {
 		return "success";
 	}
 	
-	public String addpaymentMethod(Order order,PaymentMethod paymentMethod){
+	public String addpaymentMethod(Order order, String paymentMethod){
 		order.setPaymentMethod(paymentMethod);
 		return "success";
 	}

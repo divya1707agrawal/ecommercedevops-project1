@@ -9,7 +9,8 @@
 <div class="container">
 <h2>Shopping Cart
 
-<h5>Existing user<a href="login">login here</a> New user<a href="register">register here</a></h5>
+<h5>Existing user<a href="login">login here</a>
+<br> New user<a href="register">register here</a></h5>
 </h2>
 </div>
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
