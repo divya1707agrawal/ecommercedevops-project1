@@ -29,7 +29,7 @@ private char status;
 private Date addedDate;
 @Column(name="user_id")
 private String userID;
-private int price;
+private String price;
 
 public Long getId(){
 	return id;
@@ -58,13 +58,13 @@ public void setAddedDate(Date addedDate) {
  public String getUserID(){
 	 return userID;
  }
- public void serUserID(String userID){
+ public void setUserID(String userID){
 	 this.userID=userID;
  }
- public int getPrice(){
+ public String getPrice(){
 	 return price;
  }
- public void setPrice(int price){
+ public void setPrice(String price){
 	 this.price=price;
  }
 

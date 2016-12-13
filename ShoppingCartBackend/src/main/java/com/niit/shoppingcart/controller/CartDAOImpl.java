@@ -23,28 +23,46 @@ public class CartDAOImpl implements CartDAO {
 	}*/
 	
 @Transactional
-public List<MyCart> list(MyCart myCart){
+public List<MyCart> list(String id){
+	String hql="from MyCart where userID="+"'"+id+"' and status="+"'N'";
+	Query query=sessionFactory.getCurrentSession().createQuery(hql);
+	List<MyCart> list=(List<MyCart>) query.list();
+	return list;
+}
+@Transactional
+public void update(MyCart myCart)
+{
 	sessionFactory.getCurrentSession().update(myCart);
-	return list(myCart);
 }
 
 @Transactional
 public void save(MyCart myCart)
 {
 	myCart.setId(getMaxId());
+	sessionFactory.openSession().save(myCart);
 }
 
 @Transactional
 public String delete(String id){
-	sessionFactory.openSession().delete(id);
+	MyCart myCart=new MyCart();
+	myCart.setUserID(id);
+	try{
+	  sessionFactory.openSession().delete(id);
+	}
+	catch(HibernateException e)
+	{
+		e.printStackTrace();
+		return e.getMessage();
+	}
 	return null;
 }
 
 @Transactional
 public Long getTotalAmount(String id){
-	String hql="select sum(price) from MyCart where user_ID=333";
+	String hql="select sum(price) from MyCart where user_ID="+"'"+id+"'"+" and status="+"'N'";
 	Query query=sessionFactory.getCurrentSession().createQuery(hql);
-	return (Long)query.list().get(0);
+	Long sum=(Long) query.uniqueResult();
+	return sum;
 }
 
 private Long getMaxId()
@@ -64,19 +82,17 @@ private Long getMaxId()
 
 
 public MyCart get(String id) {
-	
-	return null;
-}
-
-public void update(MyCart myCart) {
-	
-	
-}
-
-public List<MyCart> list(String id) {
-	// TODO Auto-generated method stub
+	String hql="from MyCart where userID="+"'"+id+"' and status="+"'N'";
+	Query query=sessionFactory.getCurrentSession().createQuery(hql);
+	@SuppressWarnings("unchecked")
+	List<MyCart> list=(List<MyCart>) query.list();
+	if(list!=null &&!list.isEmpty()){
+		return list.get(0);
+	}
 	return null;
 }
 
 }
+
+
 

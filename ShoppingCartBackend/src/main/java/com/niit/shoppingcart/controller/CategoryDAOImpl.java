@@ -15,6 +15,8 @@ public class CategoryDAOImpl implements CategoryDAO {
 
 	@Autowired
 	SessionFactory sessionFactory;
+	@Autowired
+	SessionFactory sessionFactory1;
 	
 //	public CategoryDAOImpl(SessionFactory sessionFactory)
 //	{
@@ -28,10 +30,10 @@ public class CategoryDAOImpl implements CategoryDAO {
 		{
 			if(get(category.getId())!=null)
 			{
-				return false;
-			}
-			sessionFactory.openSession().save(category);
-			return true;
+				sessionFactory.openSession().save(category);
+				return true;
+			}return false;
+			
 		}
 		catch(Exception e)
 		{
@@ -46,10 +48,12 @@ public class CategoryDAOImpl implements CategoryDAO {
 		{
 			if(get(category.getId())!=null)
 			{
-				return false;
+				Session session=sessionFactory.openSession();
+				session.update(category);
+				session.flush();
+				return true;
 			}
-			sessionFactory.openSession().update(category);
-			return true;
+			return false;
 		}
 		catch(HibernateException e)
 		{
@@ -62,12 +66,11 @@ public class CategoryDAOImpl implements CategoryDAO {
 	public boolean delete(Category category) {
 		try
 		{
-			if(get(category.getId())!=null)
-			{
-				return false;
-			}
-			sessionFactory.openSession().delete(category);
-			return true;
+			Session session=sessionFactory1.openSession();
+			 Category cat=(Category)session.merge(category);
+			session.delete(cat);
+			session.flush();
+				return true;
 		}
 		catch(HibernateException e)
 		{
@@ -98,32 +101,22 @@ public class CategoryDAOImpl implements CategoryDAO {
 	public Category getByName(String name) {
 		String hql="select c from Category c where c.name='"+name+"'";
 		 Query query=sessionFactory.getCurrentSession().createQuery(hql);
-	
-		 return (Category)query.list().get(0);
+       return (Category)query.list().get(0);
 	}
 	
 	@Transactional
 	public boolean saveOrUpdate(Category category)  {
 		try
 		{
-			/*if(get(category.getId())!=null)
-			{*/
-				//sessionFactory.openSession().saveOrUpdate(category);
 				Session session=sessionFactory.openSession();
 				session.saveOrUpdate(category);
                 session.flush();
 				return true;
-			/*}*/
 		}
 		catch(HibernateException e)
 		{
 			e.printStackTrace();
 		return false;
 		}
-		
 	}
-	
-
-	
-
 }

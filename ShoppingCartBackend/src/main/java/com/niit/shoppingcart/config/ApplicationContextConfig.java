@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -91,4 +92,10 @@ public class ApplicationContextConfig {
 	    multipartResolver.setMaxInMemorySize(1048576);  // 1MB
 	    return multipartResolver;
 	}
+//	@Bean(name="springSecurityFilterChain")
+	//public FilterChainProxy getFilterChainProxy()
+    //{
+		//FilterChainProxy obj=new FilterChainProxy();
+	//return obj;
+	//}
 }
