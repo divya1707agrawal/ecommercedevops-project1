@@ -65,7 +65,7 @@ public class Product {
    private String description;
 	
 	@Column(name="price")
-	private String price;
+	private float price;
 	
 	@Column(name="stock")
 	private String stock;
@@ -92,11 +92,11 @@ public String getSupplier_id() {
 		this.category_id = category_id;
 	}
 
-public String getPrice() {
+public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 
@@ -108,8 +108,8 @@ public String getPrice() {
 		this.stock = stock;
 	}
 @JsonBackReference
-	@ManyToOne
-	@JoinColumn(name="category_id",updatable=false,insertable=false,nullable=false)
+@ManyToOne
+@JoinColumn(name="category_id",updatable=false,insertable=false,nullable=false)
 	private Category category;
 	
 @JsonBackReference

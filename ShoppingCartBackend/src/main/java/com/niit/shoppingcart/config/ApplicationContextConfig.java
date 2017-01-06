@@ -13,18 +13,23 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.niit.shoppingcart.controller.BackendController;
 import com.niit.shoppingcart.controller.Category;
+import com.niit.shoppingcart.controller.MyCart;
+import com.niit.shoppingcart.controller.Order;
 import com.niit.shoppingcart.controller.Product;
 import com.niit.shoppingcart.controller.ProductDAO;
 import com.niit.shoppingcart.controller.ProductDAOImpl;
 import com.niit.shoppingcart.controller.Supplier;
-
+import com.niit.shoppingcart.controller.BillingAddress;
+import com.niit.shoppingcart.controller.ShippingAddress;
 @Configuration
 @ComponentScan("com.niit.shoppingcart.controller")
 
@@ -45,14 +50,16 @@ public class ApplicationContextConfig {
 	    dataSource.setUrl("jdbc:h2:tcp://localhost/~/test");
 	    dataSource.setUsername("sa");
 	    dataSource.setPassword("");
-	 
+	    
 	    return dataSource;
 	}	
-	
-	private Properties getHibernateProperties() {
+	@Autowired
+    @Bean(name="hibernateProperties")
+	public Properties getHibernateProperties() {
 	    Properties properties = new Properties();
-	    properties.put("hibernate.show_sql", "true");
+	    properties.put("hibernate.show_sql", true);
 	    properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+	    properties.put("hibernate.hbm2ddl.auto", "create");
 	
 	    return properties;
 	}
@@ -66,6 +73,11 @@ public class ApplicationContextConfig {
 	    sessionBuilder.addAnnotatedClasses(Category.class);
 	    sessionBuilder.addAnnotatedClasses(Product.class);
 	    sessionBuilder.addAnnotatedClasses(Supplier.class);
+	    sessionBuilder.addAnnotatedClasses(com.niit.shoppingcart.controller.User.class);
+	    sessionBuilder.addAnnotatedClasses(MyCart.class);
+	    sessionBuilder.addAnnotatedClasses(Order.class);
+	    sessionBuilder.addAnnotatedClasses(BillingAddress.class);
+	    sessionBuilder.addAnnotatedClasses(ShippingAddress.class);
 	    return sessionBuilder.buildSessionFactory();
 	}
 	
@@ -90,5 +102,11 @@ public class ApplicationContextConfig {
 	    multipartResolver.setMaxUploadSize(20971520);   // 20MB
 	    multipartResolver.setMaxInMemorySize(1048576);  // 1MB
 	    return multipartResolver;
+	}
+	@Bean(name="springSecurityFilterChain")
+	public DelegatingFilterProxy getFilterChainProxy()
+    {
+		DelegatingFilterProxy obj=new DelegatingFilterProxy();
+	return obj;
 	}
 }

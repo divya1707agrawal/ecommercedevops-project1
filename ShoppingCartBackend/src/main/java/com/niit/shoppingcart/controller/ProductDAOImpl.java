@@ -50,10 +50,13 @@ public class ProductDAOImpl implements ProductDAO {
 		{
 			if(get(Product.getId())!=null)
 			{
-				return false;
-			}
-			sessionFactory.openSession().update(Product);
+				Session session=sessionFactory.openSession();
+				session.update(Product);
+			session.flush();
 			return true;
+				
+			}
+			return false;
 		}
 		catch(HibernateException e)
 		{
@@ -66,12 +69,10 @@ public class ProductDAOImpl implements ProductDAO {
 	public boolean delete(Product Product) {
 		try
 		{
-			if(get(Product.getId())!=null)
-			{
-				return false;
-			}
-			sessionFactory.openSession().delete(Product);
-			return true;
+	Session session=sessionFactory.openSession();
+	session.delete(Product);
+	session.flush();
+	        return true;
 		}
 		catch(HibernateException e)
 		{
@@ -81,8 +82,8 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 	
 	@Transactional
-	public Product get(String id) {
-		return (Product) sessionFactory.openSession().get(Product.class,id);
+	public Product get(String string) {
+		return (Product) sessionFactory.openSession().get(Product.class,string);
 	}
 
 	@Transactional
@@ -126,6 +127,19 @@ public class ProductDAOImpl implements ProductDAO {
 	Query query=sessionFactory.getCurrentSession().createQuery(hql);
 	return query.list();
 }
+	@Transactional
 
+	public List<Product> getByName(String name) {
+		// TODO Auto-generated method stub
+		String hql ="select p from Product p where name='"+name+"'";
+		Query query=sessionFactory.getCurrentSession().createQuery(hql);
+		return query.list();
+		
+	}
+
+	
+
+
+	
 	
 }

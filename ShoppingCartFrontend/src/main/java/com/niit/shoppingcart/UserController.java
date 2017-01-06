@@ -3,9 +3,14 @@ package com.niit.shoppingcart;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,17 +18,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.niit.shoppingcart.controller.Cart;
+
 import com.niit.shoppingcart.controller.CartDAO;
 import com.niit.shoppingcart.controller.Category;
 import com.niit.shoppingcart.controller.CategoryDAO;
 import com.niit.shoppingcart.controller.MyCart;
+import com.niit.shoppingcart.controller.Product;
 import com.niit.shoppingcart.controller.ProductDAO;
 import com.niit.shoppingcart.controller.Supplier;
 import com.niit.shoppingcart.controller.SupplierDAO;
 import com.niit.shoppingcart.controller.User;
 import com.niit.shoppingcart.controller.UserDAO;
-
+@Controller
 public class UserController {
 	
 	@Autowired 
@@ -42,7 +48,7 @@ public class UserController {
 	private CartDAO cartDAO;
 	
 	@Autowired 
-	private MyCart cart;
+	private MyCart myCart;
 	
 	@Autowired 
 	private CategoryDAO categoryDAO;
@@ -80,8 +86,8 @@ public class UserController {
 		}else{
 		//	log.debug("Logged inas User");
 			mv.addObject("isAdmin","false");
-			cart=cartDAO.get(userID);
-			mv.addObject("cart",cart);
+			myCart=cartDAO.get(userID);
+			mv.addObject("myCart",myCart);
 			//fetch the cart list based on user iD
 			List<MyCart> cartList=cartDAO.list(userID);
 			mv.addObject("cartList",cartList);
@@ -96,34 +102,53 @@ public class UserController {
 	return mv;
 }
 @RequestMapping("/logout")
-public ModelAndView logout(HttpServletRequest request){
+public ModelAndView logout(HttpServletRequest request,HttpServletResponse response){
 	//log.debug("Starting of the method logout");
-	ModelAndView mv=new ModelAndView("/home");
+	ModelAndView mv=new ModelAndView("homepage");
 	session.invalidate();
+	System.out.println("logout");
 	session=request.getSession(true);
 	session.setAttribute("category",category);
 	session.setAttribute("categoryList",categoryDAO.list());
 	mv.addObject("logoutMessage","you successfully logged out");
 	mv.addObject("loggedOut","true");
+	Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+	if(auth!=null){
+		new SecurityContextLogoutHandler().logout(request,response,auth);
+	}
 	//log.debug("Ending of the method logout");
 	return mv;
 }
-@RequestMapping(value="/register",method=RequestMethod.POST)
-public ModelAndView registerUser(@ModelAttribute User user){
+
+@RequestMapping("/register")
+public ModelAndView register(){
+	//log.debug("Starting of the method register");
+	ModelAndView mv=new ModelAndView("register");
+
+  //  log.debug("Ending of the method register");
+	return mv;
+	}
+
+@RequestMapping(value="/registration",method=RequestMethod.POST)
+public ModelAndView registerUser(@ModelAttribute("user") User user){
 	//log.debug("Staring of the method registerUser");
-	ModelAndView mv=new ModelAndView("home");
-	if(userDAO.get(user.getId())==null){
-		user.setRole("ROLE_USER");
+	System.out.println("register");
+	ModelAndView mv=new ModelAndView("homepage");
+	user.setRole("ROLE_USER");
 		userDAO.saveOrUpdate(user);
 		//log.debug("you are successfully register");
 		mv.addObject("successMessage","you are successfully registered");
-	}
-	else{
-		//log.debug("User exist with this id");
-		mv.addObject("errorMessage","User exist with this id");
-	}
 	return mv;
 }
+
+//commandname
+@ModelAttribute("user")
+public User getUser()
+{
+	return new User(); 
+}
+
+
 	@RequestMapping(value="/loginError",method=RequestMethod.GET)
    public String loginError(Model model){
 		//log.debug("Starting of the method loginError");

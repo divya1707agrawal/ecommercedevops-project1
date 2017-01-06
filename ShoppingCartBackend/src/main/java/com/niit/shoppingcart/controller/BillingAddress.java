@@ -1,11 +1,22 @@
 package com.niit.shoppingcart.controller;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
+import java.io.Serializable;
 
-public class BillingAddress {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Component;
+@Entity
+@Table(name="billingaddress")
+@Component
+public class BillingAddress implements Serializable{
 
 	@Id
+	 @GeneratedValue(strategy = GenerationType.AUTO)
 	private String Id;
 	
 	@Column(name="hno")

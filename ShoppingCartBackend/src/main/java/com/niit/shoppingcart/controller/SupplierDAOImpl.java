@@ -15,7 +15,8 @@ public class SupplierDAOImpl implements SupplierDAO{
 	 
 	@Autowired
 	SessionFactory sessionFactory;
-	
+	@Autowired
+	SessionFactory sessionFactory1;
 	
 
 	
@@ -43,12 +44,12 @@ public class SupplierDAOImpl implements SupplierDAO{
 	public boolean update(Supplier supplier) {
 		try
 		{
-			if(get(supplier.getId())!=null)
-			{
-				return false;
-			}
-			sessionFactory.openSession().update(supplier);
-			return true;
+				Session session=sessionFactory.openSession();
+				session.update(supplier);
+				session.flush();
+				return true;
+			
+			
 		}
 		catch(HibernateException e)
 		{
@@ -82,12 +83,11 @@ public class SupplierDAOImpl implements SupplierDAO{
 	public boolean delete(Supplier supplier) {
 		try
 		{
-			if(get(supplier.getId())!=null)
-			{
-				return false;
-			}
-			sessionFactory.openSession().delete(supplier);
-			return true;
+				Session session=sessionFactory1.openSession();
+				session.delete(supplier);
+				session.flush();
+				return true;
+				
 		}
 		catch(HibernateException e)
 		{
@@ -98,7 +98,11 @@ public class SupplierDAOImpl implements SupplierDAO{
 	
 	@Transactional
 	public Supplier get(String id) {
-		return (Supplier) sessionFactory.openSession().get(Supplier.class,id);
+	Session session=sessionFactory.openSession();
+    
+	Supplier supplier=(Supplier)session.get(Supplier.class,id);
+	session.close();
+	return supplier;
 	}
 	@Transactional
 
