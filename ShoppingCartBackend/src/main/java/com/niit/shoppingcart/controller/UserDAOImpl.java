@@ -1,6 +1,7 @@
 package com.niit.shoppingcart.controller;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class UserDAOImpl implements UserDAO{
 		//log.info("The query is:"+hql);
 		return getUserDetails(hql);
 	}
+	@Transactional
 	public User getUserDetails(String hql)
     {
 		Query query=sessionFactory.getCurrentSession().createQuery(hql);
@@ -39,10 +41,16 @@ public class UserDAOImpl implements UserDAO{
 			}
 	return null;
      }
-
-	public boolean saveOrUpdate(User user) {
-		
+	@Transactional
+	public boolean saveOrUpdate(User user)
+	{
+		System.out.println("save");
+		Session session=sessionFactory.openSession();
+		session.saveOrUpdate(user);
+		System.out.println("save");
+        session.flush();
 		return true;
+		
 	}
 	
 

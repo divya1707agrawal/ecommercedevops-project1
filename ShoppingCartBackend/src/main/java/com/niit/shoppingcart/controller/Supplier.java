@@ -24,6 +24,7 @@ public class Supplier {
 	private String name;
 	 
 	private String address;
+	
 
 	public String getId() {
 		return id;
@@ -51,7 +52,6 @@ public class Supplier {
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy="supplier",fetch=FetchType.EAGER)
-
 private Set<Product> productlist;
 
 	public Set<Product> getProductList() {
