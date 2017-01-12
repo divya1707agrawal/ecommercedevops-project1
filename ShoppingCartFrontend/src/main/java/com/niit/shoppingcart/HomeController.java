@@ -1,5 +1,7 @@
 package com.niit.shoppingcart;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,7 +18,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.niit.shoppingcart.controller.Cart;
+
 import com.niit.shoppingcart.controller.CartDAO;
 import com.niit.shoppingcart.controller.Category;
 import com.niit.shoppingcart.controller.CategoryDAO;
@@ -74,56 +76,71 @@ public class HomeController {
 	 
 	 
 	@RequestMapping("/")
-	public ModelAndView onLoad(HttpSession session){
+	public ModelAndView onLoad(HttpSession session,Principal p){
 		//log.debug("Starting of the method onLoad");
+		if(p!=null)
+		{
+			System.out.println("principal created");
+			System.out.println(p.getName());
+			session.setAttribute("user", p.getName());
+		}
+		else
+		{
+			System.out.println("principal not  created");
+		}
 		ModelAndView mv=new ModelAndView("/homepage");
 		session.setAttribute("category",category);
 		session.setAttribute("product",product);
 		session.setAttribute("supplier",supplier);
 		session.setAttribute("categoryList",categoryDAO.list());
 		session.setAttribute("supplierList",supplierDAO.list());
+   
 		//log.debug("Ending of the method onLoad");
 		return mv;
 	}
+ 
+	
 @RequestMapping("/login")
 public ModelAndView login(){
 	//log.debug("Starting of the method login");
+
 	System.out.println("login");
+	
 	ModelAndView mv=new ModelAndView("/login");
+
+	
 	mv.addObject("user",user);
+
 	mv.addObject("isUserClickedlogin","true");
 	//log.debug("Ending of the method login");
 	return mv;
 }
-@RequestMapping("/register")
-public ModelAndView register(){
-	//log.debug("Starting of the method register");
-	ModelAndView mv=new ModelAndView("/homepage");
-	mv.addObject("user","user");
-	mv.addObject("isUserClickedRegister","true");
-  //  log.debug("Ending of the method register");
+
+@RequestMapping("/aboutus")
+public ModelAndView aboutus(){
+	ModelAndView mv=new ModelAndView("aboutus");
 	return mv;
 	}
-@RequestMapping("/validate")
-public String validate(@RequestParam(value="usr") String user ,@RequestParam(value="pwd") String pwd,Model model)
-{
-	if(user.equals("niit") && pwd.equals("niit"))
-	{
-		return "homepage";
+
+@RequestMapping("/contactus")
+public ModelAndView contactus(){
+	ModelAndView mv=new ModelAndView("contactus");
+	return mv;
 	}
-	else
-	{
-		model.addAttribute("errorMessage","invalid credentials...please try again");
-	return "login";
-	}
-}
+
+
 @RequestMapping(value="/viewproduct",method=RequestMethod.GET)
-public @ResponseBody String viewproduct(@RequestParam(value="name") String name)
+public ModelAndView viewproduct(@RequestParam(value="name") String name)
 {
-  java.util.List lst=productDAO.getBycatName(name);
-  Gson gson=new Gson();
-	String data=gson.toJson(lst);
-	return data;
+  java.util.List lst=productDAO.getByName(name);
+  System.out.println(lst.size());
+  if(lst.size()==0){
+	  ModelAndView obj=new ModelAndView("homepage");
+	  return obj;
+  }
+  ModelAndView obj=new ModelAndView("viewproduct");
+  obj.addObject("prlist",lst);
+  return obj;
 }
 @RequestMapping("/viewproductdata")
 public ModelAndView viewdata()
@@ -149,5 +166,7 @@ public String handleFileUpload(HttpServletRequest request,
 
     return "Success";
 }  
+
+
 
 }

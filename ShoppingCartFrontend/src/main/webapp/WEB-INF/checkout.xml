@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+ 
+<var name="shippingAddress" class="com.niit.shoppingcart.controller.ShippingAddress"/>
+<var name="billingAddress" class="com.niit.shoppingcart.controller.BillingAddress"/>
+<var name="mycart" class="com.niit.shoppingcart.controller.MyCart"/>
+<var name="order" class="com.niit.shoppingcart.controller.Order"/>
+<var name="paymentMethod" class="com.niit.shoppingcart.controller.PaymentMethod"/>
+
+<on-start>
+<evaluate expression="orderWebflow.initFlow()" result="flowScope.order"/>
+</on-start>
+
+<view-state id="flowExecutor" view="/WEB-INF/jsp/shippingAddress.jsp" model="shippingAddress">
+<transition on="submitShippingAddress" to="shippingAddress"/>
+</view-state>
+
+<action-state id="shippingAddress">
+<evaluate expression="orderWebflow.addShippingAddress(flowScope.order,shippingAddress)">
+</evaluate>
+<transition on="success" to="viewBillingDetails"/>
+</action-state>
+
+<view-state id="viewBillingDetails" view="/WEB-INF/jsp/billingAddress.jsp" model="billingAddress">
+<transition on="submitBillingAddress" to="billingDetails"/>
+ <transition on="backToShippingAddress" to="cart_checkout"/> 
+</view-state>
+
+<action-state id="billingDetails">
+<evaluate expression="orderWebflow.addBillingAddress(flowScope.order,billingAddress)">
+</evaluate>
+<transition on="success" to="viewPaymentDetails"/>
+</action-state>
+
+<view-state id="viewPaymentDetails" view="/WEB-INF/jsp/payment.jsp" model="paymentMethod">
+<transition on="submitPaymentMethod" to="paymentDetails"/>
+</view-state>
+
+<action-state id="paymentDetails">
+<evaluate expression="orderWebflow.addPaymentMethod(flowScope.order,paymentMethod)">
+</evaluate>
+<transition on="success" to="orderconfirm"/>
+</action-state>
+
+<view-state id="orderconfirm" view="/WEB-INF/jsp/orderConfirmed.jsp">
+<transition on="finalHome" to="toHome"/>
+</view-state>
+
+<end-state id="toHome" view="external Redirect:contextRelative:/"/>
+<global-transitions>
+<transition on="cancle" to="toCartView"/>
+</global-transitions>
+</flow>
