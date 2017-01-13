@@ -12,120 +12,98 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class ProductDAOImpl implements ProductDAO {
-	
+
 	@Autowired
 	SessionFactory sessionFactory;
-	
-//	public ProductDAOImpl(){
-//	}
-	
-	
-//	public ProductDAOImpl(SessionFactory sessionFactory)
-//	{
-//		this.sessionFactory=sessionFactory;	
-//	}
-	//@Override
+
 	@Transactional
-	public boolean save(Product Product) 
-	{
-		try
-		{
-			if(get(Product.getId())!=null)
-			{
-			sessionFactory.openSession().save(Product);
-			return true;
+	public boolean save(Product Product) {
+		try {
+			if (get(Product.getId()) != null) {
+				sessionFactory.openSession().save(Product);
+				return true;
 			}
 			return false;
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
-		return false;
+			return false;
 		}
 	}
-    
+
 	@Transactional
 	public boolean update(Product Product) {
-		try
-		{
-			if(get(Product.getId())!=null)
-			{
-				return false;
+		try {
+			if (get(Product.getId()) != null) {
+				Session session = sessionFactory.openSession();
+				session.update(Product);
+				session.flush();
+				return true;
 			}
-			sessionFactory.openSession().update(Product);
-			return true;
-		}
-		catch(HibernateException e)
-		{
+			return false;
+		} catch (HibernateException e) {
 			e.printStackTrace();
-		return false;
+			return false;
 		}
 	}
-	
+
 	@Transactional
 	public boolean delete(Product Product) {
-		try
-		{
-			if(get(Product.getId())!=null)
-			{
-				return false;
-			}
-			sessionFactory.openSession().delete(Product);
+		try {
+			Session session = sessionFactory.openSession();
+			session.delete(Product);
+			session.flush();
 			return true;
-		}
-		catch(HibernateException e)
-		{
+		} catch (HibernateException e) {
 			e.printStackTrace();
-		return false;
+			return false;
 		}
 	}
-	
+
 	@Transactional
-	public Product get(String id) {
-		return (Product) sessionFactory.openSession().get(Product.class,id);
+	public Product get(String string) {
+		return (Product) sessionFactory.openSession().get(Product.class, string);
 	}
 
 	@Transactional
 	public List<Product> list() {
-		String hql="from Product";
-		Query query=sessionFactory.getCurrentSession().createQuery(hql);
+		String hql = "from Product";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		return query.list();
 	}
-	@Transactional
-	public List<Product> getBycatName(String cat)
-	{
-		String hql ="select p.name,p.price,p.description from Product p where category.id='"+cat+"'";
-		Query query=sessionFactory.getCurrentSession().createQuery(hql);
-		return query.list();
-	}
-	
-	@Transactional
-	public boolean saveOrUpdate(Product product)
-	{
-		try
-		{
-			/*if(get(product.getId())!=null)
-			{*/
-				//sessionFactory.openSession().saveOrUpdate(product);
-				Session session=sessionFactory.openSession();
-				session.saveOrUpdate(product);
-                session.flush();
-				return true;
-			/*}*/
-		}
-		catch(HibernateException e)
-		{
-			e.printStackTrace();
-		return false;
-		}
-	}
-	
-	@Transactional
-	public List<Product> getSimilarProducts(String searchText){
-    String hql="from Product where name like%"+searchText+"%";
-	Query query=sessionFactory.getCurrentSession().createQuery(hql);
-	return query.list();
-}
 
-	
+	@Transactional
+	public List<Product> getBycatName(String cat) {
+		String hql = "select p.name,p.price,p.description from Product p where category.id='" + cat + "'";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		return query.list();
+	}
+
+	@Transactional
+	public boolean saveOrUpdate(Product product) {
+		try {
+			Session session = sessionFactory.openSession();
+			session.saveOrUpdate(product);
+			session.flush();
+			return true;
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Transactional
+	public List<Product> getSimilarProducts(String searchText) {
+		String hql = "from Product where name like%" + searchText + "%";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		return query.list();
+	}
+
+	@Transactional
+    public List<Product> getByName(String name) {
+		String hql = "select p from Product p where name='" + name + "'";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		return query.list();
+
+	}
+
 }
