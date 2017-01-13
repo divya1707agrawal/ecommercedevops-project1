@@ -6,12 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.niit.shoppingcart.controller.Category;
 import com.niit.shoppingcart.controller.CategoryDAO;
+import com.niit.shoppingcart.controller.Product;
+import com.niit.shoppingcart.controller.Supplier;
 @Controller
 public class CategoryController {
 	
@@ -77,6 +83,68 @@ public class CategoryController {
 	//	log.debug("Ending of the method addCategory");
 		return "/homepage";*/
 		}
+	
+	//edit page
+    @RequestMapping(value="manage_category1",method=RequestMethod.POST)
+    public ModelAndView editc(@ModelAttribute("editc") Category category,Model model)
+    {
+   	 
+   	 if(categoryDAO.update(category)==true){
+ 			model.addAttribute("msg","Successfully update the category");
+ 			ModelAndView obj=new ModelAndView("category");
+			java.util.List<Category> list=categoryDAO.list();
+			obj.addObject("list", list);
+			return obj;
+ 		}
+   	 else {
+ 			model.addAttribute("msg","not able to update the category");
+ 			ModelAndView obj=new ModelAndView("category");
+			java.util.List<Category> list=categoryDAO.list();
+			obj.addObject("list", list);
+			return obj;
+ 		} 
+    }
 
-}
+    @ModelAttribute("editc")
+    public Category getCategory1()
+    {
+   	return new Category(); 
+    }
+    
+    
+	/*@RequestMapping("manage_category/edit/{id}")
+   	public ModelAndView editCategory(@PathVariable("id") String id)
+   	{
+   	category=categoryDAO.get(id);
+   	
+   	ModelAndView obj=new ModelAndView("/edit");
+   	obj.addObject("selectedCategory",category);
+   	return obj;
+   	} */
+    
+    
+    //for going to edit page
+   	@RequestMapping(value="/editcategory", method=RequestMethod.GET)
+   	public ModelAndView editCate(@RequestParam("id")String id)
+   	{
+   	Category c=categoryDAO.get(id);
+    
+   	ModelAndView obj=new ModelAndView("editcategory");
+   	obj.addObject("category",c);
+   	return obj;
+   	} 
+	
+	  @RequestMapping(value="/manage_category_remove",method=RequestMethod.GET)
+	 	public @ResponseBody String delete(@RequestParam("id")String id)
+	 	{
+	 	Category category=categoryDAO.get(id);
+	 	System.out.println(category.getName());
+	 	 categoryDAO.delete(category);
+	 	 System.out.println(category.getId());
+	 	 
+	 	 categoryDAO.delete(category);
+	 		return "deleted Successfully";
+	 		
+	 	}
+	}
 
