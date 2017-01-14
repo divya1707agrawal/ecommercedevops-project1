@@ -12,4 +12,5 @@ public interface ProductDAO {
 	public List<Product> list();
 	public List<Product> getBycatName(String cat);
 	public List<Product> getSimilarProducts(String searchText);
+	public List<Product> getByName(String name);
 }

@@ -1,28 +1,51 @@
 package com.niit.shoppingcart.controller;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
+import java.io.Serializable;
 
-public class BillingAddress {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Component;
+
+@Entity
+@Table(name = "billingaddress")
+@Component
+public class BillingAddress implements Serializable {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String Id;
-	
-	@Column(name="hno")
+
+	@Column(name = "hno")
 	private String hno;
-	
-	@Column(name="street")
-   private String street;
-	
-	@Column(name="city")
+
+	@Column(name = "street")
+	private String street;
+
+	@Column(name = "city")
 	private String city;
-	
-	@Column(name="country")
+
+	@Column(name = "country")
 	private String country;
-	
-	@Column(name="pin")
+
+	@Column(name = "pin")
 	private String pin;
-	
+
+	@Column(name = "orderid")
+	private String orderid;
+
+	public String getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
+	}
+
 	public String getId() {
 		return Id;
 	}
@@ -70,7 +93,4 @@ public class BillingAddress {
 	public void setPin(String pin) {
 		this.pin = pin;
 	}
-
-	
-	
 }

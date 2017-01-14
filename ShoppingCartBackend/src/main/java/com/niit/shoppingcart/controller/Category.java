@@ -12,31 +12,31 @@ import javax.persistence.OneToMany;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.*;
 
-
-
 @Entity
 @Table
 @Component
 public class Category {
 	@Id
 	private String Id;
-	
-	@Column(name="name")
-	private String name;
-	
-	@Column(name="description")
-   private String description;
-@JsonManagedReference
-	@OneToMany(mappedBy="category",fetch=FetchType.EAGER)
-private Set<Product> product;
 
-	public Set<Product> getProducts(){
-		return product;
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "description")
+	private String description;
 	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+	private Set<Product> product;
+
+	public Set<Product> getProducts() {
+		return product;
+    }
+
+	public void setProducts(Set<Product> product) {
+		this.product = product;
 	}
- public void setProducts(Set<Product> product){
-	 this.product=product;
- }
+
 	public String getId() {
 		return Id;
 	}
@@ -60,11 +60,9 @@ private Set<Product> product;
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	@Override
-	public String toString()
-	{
-		 return "{"+Id+","+name+","+description+"}";
-	}
-	}
-	
 
+	@Override
+	public String toString() {
+		return "{" + Id + "," + name + "," + description + "}";
+	}
+}
