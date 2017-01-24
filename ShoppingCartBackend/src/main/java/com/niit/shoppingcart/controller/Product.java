@@ -21,16 +21,16 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name = "product")
 @Component
 public class Product {
-	
+
 	@Id
 	private String Id;
-	
-	@Column(name="filename")
+
+	@Column(name = "filename")
 	private String filename;
-	
-	@Column(name="content")
+
+	@Column(name = "content")
 	private byte[] content;
-	
+
 	public String getFilename() {
 		return filename;
 	}
@@ -54,29 +54,29 @@ public class Product {
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
-	@Column(name="content_type")
+
+	@Column(name = "content_type")
 	private String contentType;
-	
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	private String name;
-	
-	@Column(name="description")
-   private String description;
-	
-	@Column(name="price")
-	private String price;
-	
-	@Column(name="stock")
+
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "price")
+	private float price;
+
+	@Column(name = "stock")
 	private String stock;
-	
-	@Column(name="supplier_id")
+
+	@Column(name = "supplier_id")
 	private String supplier_id;
-	
-	@Column(name="category_id")
+
+	@Column(name = "category_id")
 	private String category_id;
-	
-public String getSupplier_id() {
+
+	public String getSupplier_id() {
 		return supplier_id;
 	}
 
@@ -92,11 +92,11 @@ public String getSupplier_id() {
 		this.category_id = category_id;
 	}
 
-public String getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 
@@ -107,29 +107,25 @@ public String getPrice() {
 	public void setStock(String stock) {
 		this.stock = stock;
 	}
-@JsonBackReference
+
+	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name="category_id",updatable=false,insertable=false,nullable=false)
+	@JoinColumn(name = "category_id", updatable = false, insertable = false, nullable = false)
 	private Category category;
-	
-@JsonBackReference
+
+	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name="supplier_id",updatable=false,insertable=false,nullable=false)
-private Supplier supplier;
-	
-	/*Transient
-	 * private MultipartFile image;
+	@JoinColumn(name = "supplier_id", updatable = false, insertable = false, nullable = false)
+	private Supplier supplier;
+
+	/*
+	 * Transient private MultipartFile image;
 	 * 
-	 * public MultipartFile getImage(){
-	 return image;
-	 }
-	 public void getImage(MultipartFile image)
-	 {
-	  this.image=image;
-	  }
-	  public supplier getSupplier()
-	  {*/
-	
+	 * public MultipartFile getImage(){ return image; } public void
+	 * getImage(MultipartFile image) { this.image=image; } public supplier
+	 * getSupplier() {
+	 */
+
 	public String getId() {
 		return Id;
 	}
@@ -153,20 +149,20 @@ private Supplier supplier;
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Category getCategory()
-	{
+
+	public Category getCategory() {
 		return category;
 	}
-	public void setCategory(Category category)
-	{
-		this.category=category;
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
-	public void setSupplier(Supplier supplier)
-	{
-		this.supplier=supplier;
+
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
 	}
-	public Supplier getSupplier()
-	{
-	return supplier;
+
+	public Supplier getSupplier() {
+		return supplier;
 	}
 }

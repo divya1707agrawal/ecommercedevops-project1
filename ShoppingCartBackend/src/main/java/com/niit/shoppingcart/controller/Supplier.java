@@ -20,9 +20,9 @@ public class Supplier {
 
 	@Id
 	private String id;
-	
+
 	private String name;
-	 
+
 	private String address;
 
 	public String getId() {
@@ -48,11 +48,10 @@ public class Supplier {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	@JsonManagedReference
-	@OneToMany(mappedBy="supplier",fetch=FetchType.EAGER)
 
-private Set<Product> productlist;
+	@JsonManagedReference
+	@OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
+	private Set<Product> productlist;
 
 	public Set<Product> getProductList() {
 		return productlist;
